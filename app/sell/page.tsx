@@ -14,9 +14,10 @@ import { useWallet } from "@/context/wallet-context"
 import { Separator } from "@/components/ui/separator"
 import { Upload, ImageIcon, X } from "lucide-react"
 import { toast } from "@/components/ui/use-toast"
+import WalletButton from "@/components/wallet-button"
 
 export default function SellPage() {
-  const { isConnected, connectWallet, mintNFT, createAuction } = useWallet()
+  const { isConnected, mintNFT, createAuction } = useWallet()
   const [isLoading, setIsLoading] = useState(false)
   const [productName, setProductName] = useState("")
   const [productDescription, setProductDescription] = useState("")
@@ -162,23 +163,7 @@ export default function SellPage() {
             <CardDescription>Connect your Cardano wallet to start selling on TrustEcom.</CardDescription>
           </CardHeader>
           <CardContent className="flex justify-center">
-            <Button
-              onClick={() => {
-                try {
-                  connectWallet()
-                } catch (error) {
-                  console.error("Error connecting wallet:", error)
-                  toast({
-                    title: "Connection Error",
-                    description: "Failed to connect wallet. Please try again.",
-                    variant: "destructive",
-                  })
-                }
-              }}
-              size="lg"
-            >
-              Connect Wallet
-            </Button>
+            <WalletButton />
           </CardContent>
         </Card>
       </div>
@@ -250,32 +235,6 @@ export default function SellPage() {
                       className={`border-2 border-dashed rounded-md p-6 flex flex-col items-center justify-center text-center hover:bg-muted/50 cursor-pointer ${imagePreview ? "border-primary" : ""}`}
                       onClick={() => fileInputRef.current?.click()}
                     >
-                      {imagePreview ? (
-                        <div className="relative w-full h-32">
-                          <img
-                            src={imagePreview || "/placeholder.svg"}
-                            alt="Product preview"
-                            className="w-full h-full object-contain"
-                          />
-                          <Button
-                            variant="destructive"
-                            size="icon"
-                            className="absolute top-0 right-0 h-6 w-6"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleRemoveImage()
-                            }}
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      ) : (
-                        <>
-                          <Upload className="h-8 w-8 text-muted-foreground mb-2" />
-                          <p className="text-sm font-medium">Upload Image</p>
-                          <p className="text-xs text-muted-foreground mt-1">PNG, JPG or WEBP</p>
-                        </>
-                      )}
                       <input
                         type="file"
                         ref={fileInputRef}
@@ -283,7 +242,32 @@ export default function SellPage() {
                         accept="image/*"
                         onChange={handleImageChange}
                       />
+                      {imagePreview ? (
+                        <div className="relative">
+                          <img
+                            src={imagePreview}
+                            alt="Product preview"
+                            className="w-32 h-32 object-cover rounded-md"
+                          />
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setImagePreview(null)
+                              setProductImage(null)
+                            }}
+                            className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground rounded-full p-1"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        </div>
+                      ) : (
+                        <>
+                          <Upload className="h-8 w-8 text-muted-foreground mb-2" />
+                          <p className="text-sm text-muted-foreground">Click to upload</p>
+                        </>
+                      )}
                     </div>
+
                     <div className="md:col-span-2 flex items-center justify-center border rounded-md p-4">
                       <div className="text-center">
                         <ImageIcon className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
@@ -361,22 +345,23 @@ export default function SellPage() {
                   and ownership. The metadata will be stored on IPFS for permanent, decentralized access.
                 </p>
               </div>
+
+              <div className="flex justify-end gap-4">
+                <Button variant="outline">Cancel</Button>
+                <TabsContent value="fixed-price">
+                  <Button onClick={() => handleCreateListing(false)} disabled={isLoading}>
+                    {isLoading ? "Creating Listing..." : "Create Listing"}
+                  </Button>
+                </TabsContent>
+                <TabsContent value="auction">
+                  <Button onClick={() => handleCreateListing(true)} disabled={isLoading}>
+                    {isLoading ? "Creating Auction..." : "Create Auction"}
+                  </Button>
+                </TabsContent>
+              </div>
             </div>
           </Tabs>
         </CardContent>
-        <CardFooter className="flex justify-end gap-4">
-          <Button variant="outline">Cancel</Button>
-          <TabsContent value="fixed-price">
-            <Button onClick={() => handleCreateListing(false)} disabled={isLoading}>
-              {isLoading ? "Creating Listing..." : "Create Listing"}
-            </Button>
-          </TabsContent>
-          <TabsContent value="auction">
-            <Button onClick={() => handleCreateListing(true)} disabled={isLoading}>
-              {isLoading ? "Creating Auction..." : "Create Auction"}
-            </Button>
-          </TabsContent>
-        </CardFooter>
       </Card>
     </div>
   )

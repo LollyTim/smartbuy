@@ -1,90 +1,123 @@
-// IPFS client for storing and retrieving data
-import { create, type IPFSHTTPClient } from "ipfs-http-client"
+"use client";
 
-// IPFS configuration
-const INFURA_PROJECT_ID = process.env.NEXT_PUBLIC_INFURA_PROJECT_ID || ""
-const INFURA_PROJECT_SECRET = process.env.NEXT_PUBLIC_INFURA_PROJECT_SECRET || ""
+import { createHelia } from "helia";
+import { unixfs } from "@helia/unixfs";
+import { Buffer } from "buffer";
 
-// Authorization for Infura IPFS
-const auth = "Basic " + Buffer.from(INFURA_PROJECT_ID + ":" + INFURA_PROJECT_SECRET).toString("base64")
+// Polyfill Buffer for browser
+if (typeof window !== "undefined") {
+  (window as any).Buffer = Buffer;
+}
 
-// Create IPFS client
-let ipfsClient: IPFSHTTPClient | undefined
+let helia: any = null;
+let fs: any = null;
 
-try {
-  ipfsClient = create({
-    host: "ipfs.infura.io",
-    port: 5001,
-    protocol: "https",
-    headers: {
-      authorization: auth,
-    },
-  })
-} catch (error) {
-  console.error("IPFS client error:", error)
-  ipfsClient = undefined
+export async function getIpfsClient() {
+  if (typeof window === "undefined") {
+    throw new Error("IPFS client can only be used in the browser");
+  }
+
+  if (!helia) {
+    helia = await createHelia();
+    fs = unixfs(helia);
+  }
+  return { helia, fs };
+}
+
+export async function uploadToIpfs(file: File) {
+  if (typeof window === "undefined") {
+    throw new Error("IPFS upload can only be used in the browser");
+  }
+
+  try {
+    const { fs } = await getIpfsClient();
+    const buffer = await file.arrayBuffer();
+    const cid = await fs.add(Buffer.from(buffer));
+    return `https://ipfs.io/ipfs/${cid}`;
+  } catch (error) {
+    console.error("Error uploading to IPFS:", error);
+    throw error;
+  }
+}
+
+export async function uploadMetadata(metadata: any) {
+  if (typeof window === "undefined") {
+    throw new Error("IPFS upload can only be used in the browser");
+  }
+
+  try {
+    const { fs } = await getIpfsClient();
+    const buffer = Buffer.from(JSON.stringify(metadata));
+    const cid = await fs.add(buffer);
+    return `https://ipfs.io/ipfs/${cid}`;
+  } catch (error) {
+    console.error("Error uploading metadata to IPFS:", error);
+    throw error;
+  }
 }
 
 // Upload file to IPFS
 export const uploadFileToIPFS = async (file: File): Promise<string> => {
-  if (!ipfsClient) throw new Error("IPFS client not initialized")
+  if (typeof window === "undefined") {
+    throw new Error("IPFS upload can only be used in the browser");
+  }
 
   try {
-    const added = await ipfsClient.add(file, {
-      progress: (prog) => console.log(`Uploading file: ${prog}`),
-    })
-
-    const url = `https://ipfs.infura.io/ipfs/${added.path}`
-    return url
+    const { fs } = await getIpfsClient();
+    const buffer = await file.arrayBuffer();
+    const cid = await fs.add(Buffer.from(buffer));
+    return `https://ipfs.io/ipfs/${cid}`;
   } catch (error) {
-    console.error("Error uploading file to IPFS:", error)
-    throw error
+    console.error("Error uploading file to IPFS:", error);
+    throw error;
   }
-}
+};
 
 // Upload JSON metadata to IPFS
 export const uploadJSONToIPFS = async (jsonData: any): Promise<string> => {
-  if (!ipfsClient) throw new Error("IPFS client not initialized")
+  if (typeof window === "undefined") {
+    throw new Error("IPFS upload can only be used in the browser");
+  }
 
   try {
-    const data = JSON.stringify(jsonData)
-    const added = await ipfsClient.add(data)
-
-    const url = `https://ipfs.infura.io/ipfs/${added.path}`
-    return url
+    const { fs } = await getIpfsClient();
+    const data = JSON.stringify(jsonData);
+    const cid = await fs.add(Buffer.from(data));
+    return `https://ipfs.io/ipfs/${cid}`;
   } catch (error) {
-    console.error("Error uploading JSON to IPFS:", error)
-    throw error
+    console.error("Error uploading JSON to IPFS:", error);
+    throw error;
   }
-}
+};
 
 // Get data from IPFS
 export const getFromIPFS = async (cid: string): Promise<any> => {
-  if (!ipfsClient) throw new Error("IPFS client not initialized")
+  if (typeof window === "undefined") {
+    throw new Error("IPFS operations can only be used in the browser");
+  }
 
   try {
-    const stream = ipfsClient.cat(cid)
-    let data = ""
-
-    for await (const chunk of stream) {
-      data += new TextDecoder().decode(chunk)
-    }
-
-    return JSON.parse(data)
+    const { fs } = await getIpfsClient();
+    const data = await fs.cat(cid);
+    return JSON.parse(new TextDecoder().decode(data));
   } catch (error) {
-    console.error("Error getting data from IPFS:", error)
-    throw error
+    console.error("Error getting data from IPFS:", error);
+    throw error;
   }
-}
+};
 
 // Create product metadata and upload to IPFS
 export const createProductMetadata = async (
   productData: any,
-  imageFile: File,
+  imageFile: File
 ): Promise<{ metadataUrl: string; imageUrl: string }> => {
+  if (typeof window === "undefined") {
+    throw new Error("IPFS operations can only be used in the browser");
+  }
+
   try {
     // Upload image first
-    const imageUrl = await uploadFileToIPFS(imageFile)
+    const imageUrl = await uploadFileToIPFS(imageFile);
 
     // Create metadata with image URL
     const metadata = {
@@ -101,15 +134,14 @@ export const createProductMetadata = async (
       details: {
         ...productData,
       },
-    }
+    };
 
     // Upload metadata to IPFS
-    const metadataUrl = await uploadJSONToIPFS(metadata)
+    const metadataUrl = await uploadJSONToIPFS(metadata);
 
-    return { metadataUrl, imageUrl }
+    return { metadataUrl, imageUrl };
   } catch (error) {
-    console.error("Error creating product metadata:", error)
-    throw error
+    console.error("Error creating product metadata:", error);
+    throw error;
   }
-}
-
+};

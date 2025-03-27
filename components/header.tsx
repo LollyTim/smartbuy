@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/navigation-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
-import { Menu, Search, ShoppingCart } from "lucide-react"
+import { Menu, Search, ShoppingCart, Copy, User, Wallet, ShoppingBag, List, LogOut } from "lucide-react"
 import { useWallet } from "@/context/wallet-context"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
@@ -28,11 +28,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
+import WalletButton from "@/components/wallet-button"
+import { toast } from "@/components/ui/use-toast"
 
 export default function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const pathname = usePathname()
-  const { isConnected, connectWallet, disconnectWallet, balance } = useWallet()
+  const { isConnected, disconnectWallet, balance, address } = useWallet()
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -185,42 +187,78 @@ export default function Header() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="rounded-full">
                   <Avatar className="h-8 w-8">
-                    <AvatarFallback>U</AvatarFallback>
+                    <AvatarFallback>{address?.slice(0, 2).toUpperCase() || "U"}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuLabel className="font-normal text-xs">Balance: {balance} ₳</DropdownMenuLabel>
+              <DropdownMenuContent align="end" className="w-80">
+                <div className="flex items-center justify-between space-x-4 p-2">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium leading-none">My Account</p>
+                    <p className="text-xs text-muted-foreground truncate max-w-[200px]">{address}</p>
+                  </div>
+                  <Avatar className="h-10 w-10">
+                    <AvatarFallback>{address?.slice(0, 2).toUpperCase() || "U"}</AvatarFallback>
+                  </Avatar>
+                </div>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <div className="p-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">Balance</span>
+                    <span className="text-sm font-bold">{balance.toFixed(2)} ₳</span>
+                  </div>
+                  <div className="flex items-center justify-between mt-1">
+                    <span className="text-xs text-muted-foreground">Address</span>
+                    <div className="flex items-center space-x-1">
+                      <span className="text-xs font-mono">{address?.slice(0, 8)}...{address?.slice(-4)}</span>
+                      <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => {
+                        if (address) {
+                          navigator.clipboard.writeText(address)
+                          toast({
+                            title: "Address Copied",
+                            description: "Wallet address copied to clipboard",
+                          })
+                        }
+                      }}>
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
                   <Link href="/profile" className="w-full">
+                    <User className="mr-2 h-4 w-4" />
                     Profile
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href="/wallet" className="w-full">
+                    <Wallet className="mr-2 h-4 w-4" />
                     Wallet
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href="/my-purchases" className="w-full">
+                    <ShoppingBag className="mr-2 h-4 w-4" />
                     My Purchases
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href="/my-listings" className="w-full">
+                    <List className="mr-2 h-4 w-4" />
                     My Listings
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={disconnectWallet}>Logout</DropdownMenuItem>
+                <DropdownMenuItem onClick={disconnectWallet}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button onClick={connectWallet} size="sm">
-              Connect Wallet
-            </Button>
+            <WalletButton />
           )}
         </div>
       </div>

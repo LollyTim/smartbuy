@@ -1,13 +1,14 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
-import { toast } from "@/components/ui/use-toast"
+import { toast, useToast } from "@/components/ui/use-toast"
 import {
   connectCardanoWallet,
   getWalletAddress,
   getWalletBalance,
   getAvailableWallets,
   type WalletAPI,
+  checkNetwork,
 } from "@/lib/cardano/wallet-connector"
 import { createPaymentTransaction, mintProductNFT } from "@/lib/cardano/transaction-builder"
 import { createProductMetadata } from "@/lib/ipfs/ipfs-client"
@@ -18,7 +19,9 @@ interface WalletContextType {
   balance: number
   walletAPI: WalletAPI | null
   availableWallets: string[]
-  connectWallet: (walletName?: string) => Promise<boolean>
+  isPreviewNetwork: boolean
+  isLoading: boolean
+  connectWallet: (walletName: string) => Promise<void>
   disconnectWallet: () => void
   sendTransaction: (to: string, amount: number) => Promise<boolean>
   mintNFT: (metadata: any, imageFile: File) => Promise<string | null>
@@ -26,12 +29,9 @@ interface WalletContextType {
   placeBid: (auctionId: string, amount: number) => Promise<boolean>
 }
 
-// Change the context creation to use null as the default value instead of functions
-// This avoids creating new function instances on every render
+const WalletContext = createContext<WalletContextType | undefined>(undefined)
 
-const WalletContext = createContext<WalletContextType | null>(null)
-
-export const useWallet = () => {
+export function useWallet() {
   const context = useContext(WalletContext)
   if (!context) {
     throw new Error("useWallet must be used within a WalletProvider")
@@ -39,12 +39,15 @@ export const useWallet = () => {
   return context
 }
 
-export const WalletProvider = ({ children }: { children: ReactNode }) => {
+export function WalletProvider({ children }: { children: React.ReactNode }) {
   const [isConnected, setIsConnected] = useState(false)
   const [address, setAddress] = useState<string | null>(null)
   const [balance, setBalance] = useState(0)
   const [walletAPI, setWalletAPI] = useState<WalletAPI | null>(null)
   const [availableWallets, setAvailableWallets] = useState<string[]>([])
+  const [isPreviewNetwork, setIsPreviewNetwork] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const { toast } = useToast()
 
   // Check for available wallets on load
   useEffect(() => {
@@ -54,112 +57,99 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [])
 
-  // Fix the useEffect hook that might be causing the Fiber error
-  // by adding proper cleanup and preventing state updates after unmounting
-
-  // Replace the useEffect for wallet connection with this improved version:
+  // Restore wallet connection on page load
   useEffect(() => {
     let isMounted = true
     const savedWalletName = localStorage.getItem("connectedWallet")
+    const savedAddress = localStorage.getItem("walletAddress")
+    const savedBalance = localStorage.getItem("walletBalance")
 
-    if (savedWalletName) {
-      // Use an async function inside the effect
-      const connectSavedWallet = async () => {
+    if (savedWalletName && savedAddress && savedBalance) {
+      // Restore saved state
+      setAddress(savedAddress)
+      setBalance(Number(savedBalance))
+      setIsConnected(true)
+
+      // Reconnect to wallet
+      const reconnectWallet = async () => {
         try {
-          // If no wallet name provided, use the first available wallet
-          const walletToConnect = savedWalletName || availableWallets[0]
-
-          if (!walletToConnect) {
-            return
-          }
-
-          // Connect to wallet
-          const api = await connectCardanoWallet(walletToConnect)
-
+          const api = await connectCardanoWallet(savedWalletName)
           if (!api) {
-            throw new Error(`Failed to connect to ${walletToConnect} wallet.`)
+            throw new Error(`Failed to reconnect to ${savedWalletName} wallet.`)
           }
 
-          // Get wallet address
-          const addr = await getWalletAddress(api)
+          // Verify the connection is still valid
+          const currentAddress = await getWalletAddress(api)
+          const currentBalance = await getWalletBalance(api)
 
-          // Get wallet balance
-          const bal = await getWalletBalance(api)
-
-          // Only update state if component is still mounted
           if (isMounted) {
             setWalletAPI(api)
-            setAddress(addr)
-            setBalance(bal)
+            setAddress(currentAddress)
+            setBalance(currentBalance)
             setIsConnected(true)
           }
         } catch (error) {
-          console.error("Failed to connect wallet:", error)
+          console.error("Failed to reconnect wallet:", error)
+          // Clear saved state if reconnection fails
+          localStorage.removeItem("connectedWallet")
+          localStorage.removeItem("walletAddress")
+          localStorage.removeItem("walletBalance")
+          if (isMounted) {
+            setIsConnected(false)
+            setAddress(null)
+            setBalance(0)
+            setWalletAPI(null)
+          }
         }
       }
 
-      connectSavedWallet()
+      reconnectWallet()
     }
 
-    // Cleanup function to prevent state updates after unmounting
     return () => {
       isMounted = false
     }
-  }, [availableWallets]) // Add availableWallets as a dependency
+  }, [])
 
-  // Also update the connectWallet function to handle errors better
-  const connectWallet = async (walletName?: string): Promise<boolean> => {
+  const connectWallet = async (walletName: string) => {
+    setIsLoading(true)
     try {
-      // If no wallet name provided, use the first available wallet
-      const walletToConnect = walletName || availableWallets[0]
-
-      if (!walletToConnect) {
-        toast({
-          title: "No Wallet Available",
-          description: "Please install a Cardano wallet extension like Nami, Eternl, or Flint.",
-          variant: "destructive",
-        })
-        return false
-      }
-
-      // Connect to wallet - use the renamed function here
-      const api = await connectCardanoWallet(walletToConnect)
-
+      const api = await connectCardanoWallet(walletName)
       if (!api) {
-        throw new Error(`Failed to connect to ${walletToConnect} wallet.`)
+        throw new Error("Failed to connect to wallet")
       }
 
       // Get wallet address
-      const addr = await getWalletAddress(api)
+      const walletAddress = await getWalletAddress(api)
+      setAddress(walletAddress)
 
-      // Get wallet balance
-      const bal = await getWalletBalance(api)
+      // Check network
+      const isPreview = await checkNetwork(api)
+      setIsPreviewNetwork(isPreview)
 
-      // Update state
+      if (!isPreview) {
+        toast({
+          title: "Wrong Network",
+          description: "Please switch to Cardano Preview Network in your wallet settings.",
+          variant: "destructive",
+        })
+      }
+
+      // Get initial balance
+      const walletBalance = await getWalletBalance(api)
+      setBalance(walletBalance)
+
       setWalletAPI(api)
-      setAddress(addr)
-      setBalance(bal)
       setIsConnected(true)
-
-      // Save connected wallet to localStorage
-      localStorage.setItem("connectedWallet", walletToConnect)
-
-      toast({
-        title: "Wallet Connected",
-        description: `Successfully connected to ${walletToConnect} wallet.`,
-      })
-
-      return true
     } catch (error) {
       console.error("Failed to connect wallet:", error)
-
       toast({
         title: "Connection Failed",
-        description: error instanceof Error ? error.message : "Failed to connect wallet. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to connect to wallet",
         variant: "destructive",
       })
-
-      return false
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -169,6 +159,8 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     setBalance(0)
     setWalletAPI(null)
     localStorage.removeItem("connectedWallet")
+    localStorage.removeItem("walletAddress")
+    localStorage.removeItem("walletBalance")
 
     toast({
       title: "Wallet Disconnected",
@@ -200,6 +192,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       // Update balance
       const newBalance = await getWalletBalance(walletAPI)
       setBalance(newBalance)
+      localStorage.setItem("walletBalance", newBalance.toString())
 
       toast({
         title: "Transaction Successful",
@@ -257,7 +250,11 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  const createAuction = async (productId: string, startingPrice: number, duration: number): Promise<string | null> => {
+  const createAuction = async (
+    productId: string,
+    startingPrice: number,
+    duration: number
+  ): Promise<string | null> => {
     try {
       if (!walletAPI || !address) {
         throw new Error("Wallet not connected")
@@ -267,14 +264,12 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       // For this demo, we'll simulate creating an auction
 
       // Simulate auction creation delay
-      await new Promise((resolve) => setTimeout(resolve, 3000))
+      await new Promise((resolve) => setTimeout(resolve, 2000))
 
-      // Mock auction ID
-      const auctionId = `auction${Math.random().toString(36).substring(2, 15)}`
-
+      const auctionId = `auction_${productId}_${Date.now()}`
       toast({
         title: "Auction Created Successfully",
-        description: `Your auction has been created with ID: ${auctionId.substring(0, 10)}...`,
+        description: `Your auction has been created with ID: ${auctionId.substring(0, 15)}...`,
       })
 
       return auctionId
@@ -337,6 +332,8 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     balance,
     walletAPI,
     availableWallets,
+    isPreviewNetwork,
+    isLoading,
     connectWallet,
     disconnectWallet,
     sendTransaction,

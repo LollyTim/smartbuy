@@ -2,7 +2,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Separator } from "@/components/ui/separator"
 import Link from "next/link"
 
 export default function DocumentationPage() {
@@ -11,16 +10,17 @@ export default function DocumentationPage() {
       <div className="max-w-5xl mx-auto">
         <h1 className="text-4xl font-bold tracking-tight mb-2">TrustEcom Documentation</h1>
         <p className="text-xl text-muted-foreground mb-8">
-          A comprehensive guide to building and deploying TrustEcom for your hackathon
+          A comprehensive guide to building and deploying TrustEcom for your blockchain e-commerce platform
         </p>
 
         <Tabs defaultValue="overview" className="w-full">
           <TabsList className="mb-8 w-full justify-start">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="architecture">Architecture</TabsTrigger>
-            <TabsTrigger value="learning">Learning Path</TabsTrigger>
-            <TabsTrigger value="implementation">Implementation</TabsTrigger>
-            <TabsTrigger value="hackathon">Hackathon Tips</TabsTrigger>
+            <TabsTrigger value="wallet">Wallet Integration</TabsTrigger>
+            <TabsTrigger value="smart-contracts">Smart Contracts</TabsTrigger>
+            <TabsTrigger value="nft">NFT Implementation</TabsTrigger>
+            <TabsTrigger value="setup">Setup Guide</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -66,35 +66,28 @@ export default function DocumentationPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-lg font-medium">Target Users</h3>
+                  <h3 className="text-lg font-medium">Technology Stack</h3>
                   <ul className="list-disc pl-6 space-y-2">
                     <li>
-                      <span className="font-medium">Buyers:</span> Looking for authentic products with verifiable
-                      history.
+                      <span className="font-medium">Frontend:</span> Next.js 14 with App Router, React 18, Tailwind CSS,
+                      shadcn/ui
                     </li>
                     <li>
-                      <span className="font-medium">Sellers:</span> Wanting to prove product authenticity and reach more
-                      buyers.
+                      <span className="font-medium">Blockchain Integration:</span> Mesh.js SDK for Cardano integration
                     </li>
                     <li>
-                      <span className="font-medium">Auctioneers:</span> Seeking secure platforms for auctioning rare
-                      collectibles.
+                      <span className="font-medium">Smart Contracts:</span> Cardano smart contracts for escrow,
+                      auctions, and NFT minting
                     </li>
                     <li>
-                      <span className="font-medium">Crypto Enthusiasts:</span> Interested in NFT-backed purchases and
-                      blockchain applications.
+                      <span className="font-medium">Storage:</span> IPFS for decentralized storage of product images and
+                      metadata
+                    </li>
+                    <li>
+                      <span className="font-medium">Wallet:</span> CIP-30 compliant wallet integration (Nami, Eternl,
+                      Flint, etc.)
                     </li>
                   </ul>
-                </div>
-
-                <div className="space-y-2">
-                  <h3 className="text-lg font-medium">Business Value</h3>
-                  <p>
-                    TrustEcom addresses key challenges in e-commerce, particularly in regions with high fraud rates. By
-                    leveraging blockchain technology, it creates a trustless environment where buyers can verify product
-                    authenticity without relying on centralized authorities. The platform also opens new opportunities
-                    for sellers to reach global markets with verifiable authentic products.
-                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -115,18 +108,19 @@ export default function DocumentationPage() {
                       {`
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
 │                 │     │                 │     │                 │
-│  Frontend       │     │  Backend        │     │  Blockchain     │
-│  (Next.js)      │◄───►│  (Node.js)      │◄───►│  (Cardano)      │
+│  Frontend       │     │  Blockchain     │     │  Decentralized  │
+│  (Next.js)      │◄───►│  (Cardano)      │◄───►│  Storage (IPFS) │
 │                 │     │                 │     │                 │
 └─────────────────┘     └─────────────────┘     └─────────────────┘
-                              │
-                              ▼
-                        ┌─────────────────┐
-                        │                 │
-                        │  Database       │
-                        │  (PostgreSQL)   │
-                        │                 │
-                        └─────────────────┘
+        │                       │
+        │                       │
+        ▼                       ▼
+┌─────────────────┐     ┌─────────────────┐
+│                 │     │                 │
+│  Wallet         │     │  Smart          │
+│  Integration    │     │  Contracts      │
+│                 │     │                 │
+└─────────────────┘     └─────────────────┘
                       `}
                     </pre>
                   </div>
@@ -137,36 +131,32 @@ export default function DocumentationPage() {
 
                   <h4 className="font-medium mt-4">1. Frontend (Next.js)</h4>
                   <ul className="list-disc pl-6 space-y-1">
-                    <li>React-based UI with Next.js for server-side rendering and routing</li>
-                    <li>Tailwind CSS for responsive styling</li>
-                    <li>Wallet connection interface using CIP-30 compliant connectors</li>
-                    <li>Client-side transaction building and signing</li>
+                    <li>React-based UI with Next.js App Router for server-side rendering and routing</li>
+                    <li>Tailwind CSS for responsive styling with shadcn/ui components</li>
+                    <li>Client-side wallet integration using Mesh.js</li>
                     <li>Product browsing, auction bidding, and marketplace interfaces</li>
                   </ul>
 
-                  <h4 className="font-medium mt-4">2. Backend (Node.js)</h4>
+                  <h4 className="font-medium mt-4">2. Blockchain Integration (Mesh.js)</h4>
                   <ul className="list-disc pl-6 space-y-1">
-                    <li>RESTful API for product management, user authentication, and transactions</li>
-                    <li>Integration with Cardano blockchain for transaction verification</li>
-                    <li>NFT minting and management services</li>
-                    <li>Auction management and bid processing</li>
-                    <li>Payment processing and currency conversion</li>
+                    <li>Wallet connection and management</li>
+                    <li>Transaction building and signing</li>
+                    <li>NFT minting and management</li>
+                    <li>Smart contract interaction</li>
                   </ul>
 
-                  <h4 className="font-medium mt-4">3. Blockchain Layer (Cardano)</h4>
+                  <h4 className="font-medium mt-4">3. Smart Contracts</h4>
                   <ul className="list-disc pl-6 space-y-1">
-                    <li>Smart contracts for auctions and escrow services</li>
-                    <li>NFT minting and token management</li>
-                    <li>Transaction verification and processing</li>
-                    <li>On-chain data storage for product verification</li>
+                    <li>Escrow contracts for secure transactions</li>
+                    <li>Auction contracts for bidding and winner determination</li>
+                    <li>NFT minting policies for product tokenization</li>
                   </ul>
 
-                  <h4 className="font-medium mt-4">4. Database (PostgreSQL/Supabase)</h4>
+                  <h4 className="font-medium mt-4">4. Decentralized Storage (IPFS)</h4>
                   <ul className="list-disc pl-6 space-y-1">
-                    <li>Product catalog and metadata storage</li>
-                    <li>User profiles and authentication data</li>
-                    <li>Transaction history and order management</li>
-                    <li>Review and rating system</li>
+                    <li>Product image storage</li>
+                    <li>NFT metadata storage</li>
+                    <li>Permanent, decentralized access to product information</li>
                   </ul>
                 </div>
 
@@ -176,37 +166,130 @@ export default function DocumentationPage() {
                   <div className="bg-muted p-4 rounded-md my-4">
                     <pre className="text-sm overflow-auto">
                       {`
-1. User browses products → Frontend displays products from Backend
-2. User selects product → Product details retrieved from Backend
-3. User initiates purchase → Frontend connects to user's wallet
-4. User confirms purchase → Transaction built and signed by wallet
-5. Transaction submitted → Backend verifies transaction on blockchain
-6. NFT ownership transferred → Backend updates product status
-7. Purchase confirmed → Frontend displays confirmation to user
+1. User connects wallet → Mesh.js handles wallet connection
+2. User lists product → Product image uploaded to IPFS
+3. Product tokenized as NFT → NFT minted on Cardano blockchain
+4. Buyer browses products → Product details retrieved from blockchain
+5. Buyer purchases product → Escrow contract created
+6. Transaction confirmed → NFT ownership transferred
+7. Purchase completed → Buyer receives NFT certificate
+                      `}
+                    </pre>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="wallet" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Wallet Integration</CardTitle>
+                <CardDescription>How TrustEcom integrates with Cardano wallets</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <h3 className="text-lg font-medium">Mesh.js Integration</h3>
+                  <p>
+                    TrustEcom uses the Mesh.js SDK to integrate with Cardano wallets. Mesh.js provides a unified API for
+                    interacting with different Cardano wallets that follow the CIP-30 standard.
+                  </p>
+                  <div className="bg-muted p-4 rounded-md my-4">
+                    <pre className="text-sm overflow-auto">
+                      {`
+// components/client-providers.tsx
+"use client"
+
+import { WalletProvider } from "@/context/wallet-context"
+import { MeshProvider } from "@meshsdk/react"
+import { Suspense, type ReactNode } from "react"
+
+export default function ClientProviders({ children }: { children: ReactNode }) {
+  return (
+    <MeshProvider>
+      <Suspense fallback={<div>Loading wallet...</div>}>
+        <WalletProvider>{children}</WalletProvider>
+      </Suspense>
+    </MeshProvider>
+  )
+}
                       `}
                     </pre>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-lg font-medium">Smart Contract Architecture</h3>
-                  <p>TrustEcom utilizes several smart contracts on the Cardano blockchain:</p>
-                  <ul className="list-disc pl-6 space-y-2">
+                  <h3 className="text-lg font-medium">Wallet Context</h3>
+                  <p>
+                    The WalletContext provides a centralized way to manage wallet state and functions throughout the
+                    application. It handles wallet connection, disconnection, balance retrieval, and transaction
+                    operations.
+                  </p>
+                  <div className="bg-muted p-4 rounded-md my-4">
+                    <pre className="text-sm overflow-auto">
+                      {`
+// Example usage of wallet context
+import { useWallet } from "@/context/wallet-context"
+
+export default function MyComponent() {
+  const { isConnected, address, balance, connectWallet } = useWallet()
+  
+  return (
+    <div>
+      {isConnected ? (
+        <p>Connected: {address} ({balance} ₳)</p>
+      ) : (
+        <button onClick={connectWallet}>Connect Wallet</button>
+      )}
+    </div>
+  )
+}
+                      `}
+                    </pre>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-lg font-medium">Supported Wallets</h3>
+                  <p>TrustEcom supports any Cardano wallet that implements the CIP-30 standard, including:</p>
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li>Nami</li>
+                    <li>Eternl</li>
+                    <li>Flint</li>
+                    <li>Yoroi</li>
+                    <li>GeroWallet</li>
+                    <li>Typhon</li>
+                  </ul>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-lg font-medium">Wallet Functions</h3>
+                  <p>The wallet integration provides the following functions:</p>
+                  <ul className="list-disc pl-6 space-y-1">
                     <li>
-                      <span className="font-medium">NFT Minting Contract:</span> Handles the creation of NFTs
-                      representing products, embedding metadata about the product's characteristics and origin.
+                      <span className="font-medium">connectWallet:</span> Connect to a Cardano wallet
                     </li>
                     <li>
-                      <span className="font-medium">Escrow Contract:</span> Manages secure transactions between buyers
-                      and sellers, releasing funds only when delivery is confirmed.
+                      <span className="font-medium">disconnectWallet:</span> Disconnect from the current wallet
                     </li>
                     <li>
-                      <span className="font-medium">Auction Contract:</span> Handles bid management, winner
-                      determination, and automatic payment processing for auction items.
+                      <span className="font-medium">sendTransaction:</span> Send ADA to another address
                     </li>
                     <li>
-                      <span className="font-medium">Verification Contract:</span> Provides on-chain verification of
-                      product authenticity and ownership history.
+                      <span className="font-medium">mintNFT:</span> Mint an NFT for a product
+                    </li>
+                    <li>
+                      <span className="font-medium">createAuction:</span> Create an auction for a product
+                    </li>
+                    <li>
+                      <span className="font-medium">placeBid:</span> Place a bid on an auction
+                    </li>
+                    <li>
+                      <span className="font-medium">purchaseProduct:</span> Purchase a product using an escrow contract
+                    </li>
+                    <li>
+                      <span className="font-medium">getTransactionHistory:</span> Get transaction history for the
+                      connected wallet
                     </li>
                   </ul>
                 </div>
@@ -214,907 +297,383 @@ export default function DocumentationPage() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="learning" className="space-y-6">
+          <TabsContent value="smart-contracts" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Learning Path</CardTitle>
-                <CardDescription>Essential skills and resources to build TrustEcom</CardDescription>
+                <CardTitle>Smart Contracts</CardTitle>
+                <CardDescription>How TrustEcom uses Cardano smart contracts</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <h3 className="text-lg font-medium">Core Technologies to Learn</h3>
+                  <h3 className="text-lg font-medium">Escrow Contracts</h3>
+                  <p>
+                    Escrow contracts are used to facilitate secure transactions between buyers and sellers. The contract
+                    holds the payment until the product is delivered, then releases the payment to the seller.
+                  </p>
+                  <div className="bg-muted p-4 rounded-md my-4">
+                    <pre className="text-sm overflow-auto">
+                      {`
+// Example of creating an escrow contract
+import { createEscrowContract } from "@/lib/cardano/smart-contracts"
 
-                  <div className="mt-4 space-y-4">
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">1. Cardano Blockchain Development</h4>
-                      <Separator className="my-2" />
-                      <div className="space-y-2">
-                        <p className="text-sm">
-                          Understanding Cardano's architecture, transaction model, and native tokens is essential for
-                          building TrustEcom.
-                        </p>
-                        <div className="space-y-1">
-                          <p className="text-sm font-medium">Key Concepts:</p>
-                          <ul className="list-disc pl-6 text-sm space-y-1">
-                            <li>Cardano's eUTxO model</li>
-                            <li>Native tokens and NFTs on Cardano</li>
-                            <li>Transaction building and signing</li>
-                            <li>Metadata handling</li>
-                          </ul>
-                        </div>
-                        <div className="space-y-1">
-                          <p className="text-sm font-medium">Learning Resources:</p>
-                          <ul className="list-disc pl-6 text-sm space-y-1">
-                            <li>
-                              <Link
-                                href="https://docs.cardano.org/"
-                                target="_blank"
-                                className="text-primary hover:underline"
-                              >
-                                Cardano Documentation
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                href="https://developers.cardano.org/"
-                                target="_blank"
-                                className="text-primary hover:underline"
-                              >
-                                Cardano Developer Portal
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                href="https://www.youtube.com/c/CardanoFoundation"
-                                target="_blank"
-                                className="text-primary hover:underline"
-                              >
-                                Cardano Foundation YouTube
-                              </Link>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">2. Smart Contract Development with Plutus</h4>
-                      <Separator className="my-2" />
-                      <div className="space-y-2">
-                        <p className="text-sm">
-                          Plutus is Cardano's smart contract platform, which uses Haskell as its programming language.
-                        </p>
-                        <div className="space-y-1">
-                          <p className="text-sm font-medium">Key Concepts:</p>
-                          <ul className="list-disc pl-6 text-sm space-y-1">
-                            <li>Haskell programming language basics</li>
-                            <li>Plutus smart contract structure</li>
-                            <li>Validator scripts</li>
-                            <li>On-chain and off-chain code</li>
-                          </ul>
-                        </div>
-                        <div className="space-y-1">
-                          <p className="text-sm font-medium">Learning Resources:</p>
-                          <ul className="list-disc pl-6 text-sm space-y-1">
-                            <li>
-                              <Link
-                                href="https://plutus-pioneer-program.readthedocs.io/en/latest/"
-                                target="_blank"
-                                className="text-primary hover:underline"
-                              >
-                                Plutus Pioneer Program
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                href="http://learnyouahaskell.com/"
-                                target="_blank"
-                                className="text-primary hover:underline"
-                              >
-                                Learn You a Haskell for Great Good
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                href="https://playground.plutus.iohkdev.io/"
-                                target="_blank"
-                                className="text-primary hover:underline"
-                              >
-                                Plutus Playground
-                              </Link>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">3. Frontend Development</h4>
-                      <Separator className="my-2" />
-                      <div className="space-y-2">
-                        <p className="text-sm">
-                          Building a responsive, user-friendly interface for TrustEcom using modern web technologies.
-                        </p>
-                        <div className="space-y-1">
-                          <p className="text-sm font-medium">Key Concepts:</p>
-                          <ul className="list-disc pl-6 text-sm space-y-1">
-                            <li>React.js fundamentals</li>
-                            <li>Next.js for server-side rendering</li>
-                            <li>Tailwind CSS for styling</li>
-                            <li>Wallet integration (CIP-30)</li>
-                          </ul>
-                        </div>
-                        <div className="space-y-1">
-                          <p className="text-sm font-medium">Learning Resources:</p>
-                          <ul className="list-disc pl-6 text-sm space-y-1">
-                            <li>
-                              <Link href="https://react.dev/" target="_blank" className="text-primary hover:underline">
-                                React Documentation
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                href="https://nextjs.org/docs"
-                                target="_blank"
-                                className="text-primary hover:underline"
-                              >
-                                Next.js Documentation
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                href="https://tailwindcss.com/docs"
-                                target="_blank"
-                                className="text-primary hover:underline"
-                              >
-                                Tailwind CSS Documentation
-                              </Link>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">4. Backend Development</h4>
-                      <Separator className="my-2" />
-                      <div className="space-y-2">
-                        <p className="text-sm">
-                          Creating a robust backend to handle business logic, database operations, and blockchain
-                          integration.
-                        </p>
-                        <div className="space-y-1">
-                          <p className="text-sm font-medium">Key Concepts:</p>
-                          <ul className="list-disc pl-6 text-sm space-y-1">
-                            <li>Node.js and Express</li>
-                            <li>RESTful API design</li>
-                            <li>PostgreSQL/Supabase for database</li>
-                            <li>Authentication and authorization</li>
-                          </ul>
-                        </div>
-                        <div className="space-y-1">
-                          <p className="text-sm font-medium">Learning Resources:</p>
-                          <ul className="list-disc pl-6 text-sm space-y-1">
-                            <li>
-                              <Link
-                                href="https://nodejs.org/en/docs/"
-                                target="_blank"
-                                className="text-primary hover:underline"
-                              >
-                                Node.js Documentation
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                href="https://expressjs.com/"
-                                target="_blank"
-                                className="text-primary hover:underline"
-                              >
-                                Express Documentation
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                href="https://supabase.com/docs"
-                                target="_blank"
-                                className="text-primary hover:underline"
-                              >
-                                Supabase Documentation
-                              </Link>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">5. Blockchain Integration</h4>
-                      <Separator className="my-2" />
-                      <div className="space-y-2">
-                        <p className="text-sm">
-                          Connecting your application to the Cardano blockchain and implementing wallet functionality.
-                        </p>
-                        <div className="space-y-1">
-                          <p className="text-sm font-medium">Key Concepts:</p>
-                          <ul className="list-disc pl-6 text-sm space-y-1">
-                            <li>Cardano Serialization Library</li>
-                            <li>Wallet connectors (CIP-30)</li>
-                            <li>Transaction building and submission</li>
-                            <li>Blockfrost API for blockchain data</li>
-                          </ul>
-                        </div>
-                        <div className="space-y-1">
-                          <p className="text-sm font-medium">Learning Resources:</p>
-                          <ul className="list-disc pl-6 text-sm space-y-1">
-                            <li>
-                              <Link
-                                href="https://github.com/Emurgo/cardano-serialization-lib"
-                                target="_blank"
-                                className="text-primary hover:underline"
-                              >
-                                Cardano Serialization Library
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                href="https://cips.cardano.org/cips/cip30/"
-                                target="_blank"
-                                className="text-primary hover:underline"
-                              >
-                                CIP-30 Specification
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                href="https://docs.blockfrost.io/"
-                                target="_blank"
-                                className="text-primary hover:underline"
-                              >
-                                Blockfrost API Documentation
-                              </Link>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
+const txHash = await createEscrowContract(wallet, {
+  productId: "product123",
+  price: 100000000, // 100 ADA in lovelace
+  buyer: buyerAddress,
+  seller: sellerAddress,
+})
+                      `}
+                    </pre>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-lg font-medium">Learning Strategy</h3>
-                  <p>Follow this step-by-step approach to efficiently learn the necessary skills:</p>
+                  <h3 className="text-lg font-medium">Auction Contracts</h3>
+                  <p>
+                    Auction contracts manage the bidding process for products. They ensure that bids are valid, track
+                    the highest bidder, and automatically transfer the product to the winner when the auction ends.
+                  </p>
+                  <div className="bg-muted p-4 rounded-md my-4">
+                    <pre className="text-sm overflow-auto">
+                      {`
+// Example of creating an auction contract
+import { createAuctionContract } from "@/lib/cardano/smart-contracts"
+
+const auctionId = await createAuctionContract(wallet, {
+  productId: "product123",
+  startingPrice: 50000000, // 50 ADA in lovelace
+  duration: 604800, // 7 days in seconds
+  seller: sellerAddress,
+  endTime: Math.floor(Date.now() / 1000) + 604800,
+})
+                      `}
+                    </pre>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-lg font-medium">NFT Minting Policies</h3>
+                  <p>
+                    NFT minting policies control the creation of NFTs for products. They ensure that each NFT is unique
+                    and can only be minted by the authorized seller.
+                  </p>
+                  <div className="bg-muted p-4 rounded-md my-4">
+                    <pre className="text-sm overflow-auto">
+                      {`
+// Example of generating a policy ID for NFT minting
+import { generatePolicyId } from "@/lib/cardano/nft-helpers"
+
+const policyId = await generatePolicyId(wallet)
+                      `}
+                    </pre>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-lg font-medium">Transaction Building</h3>
+                  <p>
+                    TrustEcom uses Mesh.js to build and sign transactions. This includes simple payments, NFT minting,
+                    and interactions with smart contracts.
+                  </p>
+                  <div className="bg-muted p-4 rounded-md my-4">
+                    <pre className="text-sm overflow-auto">
+                      {`
+// Example of building a transaction
+import { Transaction } from "@meshsdk/core"
+
+const tx = new Transaction({ initiator: wallet })
+tx.sendLovelace(recipientAddress, "100000000") // 100 ADA
+tx.setMetadata(0, { type: "payment", description: "Payment for Product" })
+const signedTx = await tx.sign()
+const txHash = await tx.submit()
+                      `}
+                    </pre>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="nft" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>NFT Implementation</CardTitle>
+                <CardDescription>How TrustEcom uses NFTs for product authentication</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <h3 className="text-lg font-medium">NFT Minting Process</h3>
+                  <p>
+                    When a seller lists a product, TrustEcom mints an NFT to represent the product. This NFT contains
+                    metadata about the product, including its name, description, image, and other attributes.
+                  </p>
+                  <ol className="list-decimal pl-6 space-y-2">
+                    <li>Seller uploads product image</li>
+                    <li>Image is stored on IPFS</li>
+                    <li>Product metadata is created with the IPFS image URL</li>
+                    <li>Metadata is stored on IPFS</li>
+                    <li>NFT is minted on the Cardano blockchain with the metadata URL</li>
+                    <li>NFT is assigned to the seller's wallet</li>
+                  </ol>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-lg font-medium">NFT Metadata</h3>
+                  <p>
+                    The NFT metadata follows the CIP-25 standard for Cardano NFTs. It includes the following
+                    information:
+                  </p>
+                  <div className="bg-muted p-4 rounded-md my-4">
+                    <pre className="text-sm overflow-auto">
+                      {`
+{
+  "721": {
+    "policy_id": {
+      "asset_name": {
+        "name": "Product Name",
+        "description": "Product Description",
+        "image": "ipfs://QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco",
+        "mediaType": "image/png",
+        "attributes": [
+          { "trait_type": "Category", "value": "Electronics" },
+          { "trait_type": "Price", "value": 100 },
+          { "trait_type": "Seller", "value": "addr1qxy8epmr..." },
+          { "trait_type": "Created", "value": "2023-05-01T12:00:00Z" }
+        ]
+      }
+    }
+  }
+}
+                      `}
+                    </pre>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-lg font-medium">NFT Transfer</h3>
+                  <p>
+                    When a product is purchased, the NFT is transferred from the seller to the buyer. This transfer is
+                    recorded on the blockchain, providing a transparent record of ownership.
+                  </p>
+                  <div className="bg-muted p-4 rounded-md my-4">
+                    <pre className="text-sm overflow-auto">
+                      {`
+// Example of transferring an NFT
+import { Transaction } from "@meshsdk/core"
+
+const tx = new Transaction({ initiator: wallet })
+tx.sendAssets(buyerAddress, [
+  {
+    unit: assetId,
+    quantity: "1",
+  },
+])
+const signedTx = await tx.sign()
+const txHash = await tx.submit()
+                      `}
+                    </pre>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-lg font-medium">NFT Verification</h3>
+                  <p>
+                    Buyers can verify the authenticity of a product by checking its NFT on the blockchain. This includes
+                    viewing the product's metadata, ownership history, and transaction records.
+                  </p>
+                  <div className="bg-muted p-4 rounded-md my-4">
+                    <pre className="text-sm overflow-auto">
+                      {`
+// Example of verifying NFT ownership
+import { verifyNFTOwnership } from "@/lib/cardano/nft-helpers"
+
+const isOwner = await verifyNFTOwnership(wallet, assetId)
+                      `}
+                    </pre>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="setup" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Setup Guide</CardTitle>
+                <CardDescription>How to set up and deploy TrustEcom</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <h3 className="text-lg font-medium">Prerequisites</h3>
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li>Node.js 18 or later</li>
+                    <li>npm or yarn</li>
+                    <li>Cardano wallet extension (Nami, Eternl, Flint, etc.)</li>
+                    <li>Infura account for IPFS storage</li>
+                    <li>Blockfrost API key for Cardano blockchain interaction</li>
+                  </ul>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-lg font-medium">Installation</h3>
                   <ol className="list-decimal pl-6 space-y-2">
                     <li>
-                      <span className="font-medium">Start with frontend basics:</span> Learn React and Next.js to
-                      understand the UI framework.
+                      Clone the repository:
+                      <div className="bg-muted p-2 rounded-md my-2">
+                        <code>git clone https://github.com/yourusername/trustecom.git</code>
+                      </div>
                     </li>
                     <li>
-                      <span className="font-medium">Learn Cardano fundamentals:</span> Understand how the blockchain
-                      works before diving into smart contracts.
+                      Install dependencies:
+                      <div className="bg-muted p-2 rounded-md my-2">
+                        <code>cd trustecom && npm install</code>
+                      </div>
                     </li>
                     <li>
-                      <span className="font-medium">Build a simple wallet integration:</span> Connect to Cardano wallets
-                      using CIP-30 standards.
+                      Create a <code>.env.local</code> file with the following variables:
+                      <div className="bg-muted p-2 rounded-md my-2">
+                        <pre>
+                          {`NEXT_PUBLIC_INFURA_PROJECT_ID=your_infura_project_id
+NEXT_PUBLIC_INFURA_PROJECT_SECRET=your_infura_project_secret
+NEXT_PUBLIC_BLOCKFROST_API_KEY=your_blockfrost_api_key
+NEXT_PUBLIC_BLOCKFROST_URL=https://cardano-testnet.blockfrost.io/api/v0
+INFURA_PROJECT_ID=your_infura_project_id
+INFURA_PROJECT_SECRET=your_infura_project_secret`}
+                        </pre>
+                      </div>
                     </li>
                     <li>
-                      <span className="font-medium">Develop backend services:</span> Create APIs for product management
-                      and user authentication.
-                    </li>
-                    <li>
-                      <span className="font-medium">Implement NFT functionality:</span> Learn how to mint and transfer
-                      NFTs on Cardano.
-                    </li>
-                    <li>
-                      <span className="font-medium">Develop smart contracts:</span> Create and test the auction and
-                      escrow contracts.
-                    </li>
-                    <li>
-                      <span className="font-medium">Integrate all components:</span> Connect frontend, backend, and
-                      blockchain layers.
+                      Start the development server:
+                      <div className="bg-muted p-2 rounded-md my-2">
+                        <code>npm run dev</code>
+                      </div>
                     </li>
                   </ol>
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
 
-          <TabsContent value="implementation" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Implementation Guide</CardTitle>
-                <CardDescription>Step-by-step instructions for building TrustEcom</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
                 <div className="space-y-2">
-                  <h3 className="text-lg font-medium">Phase 1: Project Setup and Frontend Development</h3>
-
-                  <div className="space-y-4 mt-4">
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">Step 1: Project Initialization</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">
-                          Set up the Next.js project with Tailwind CSS and shadcn/ui components:
-                        </p>
-                        <div className="bg-muted p-3 rounded-md">
-                          <pre className="text-xs overflow-auto">
-                            {`
-# Create a new Next.js project
-npx create-next-app@latest trustecom --typescript --tailwind --eslint
-
-# Navigate to the project directory
-cd trustecom
-
-# Install shadcn/ui
-npx shadcn@latest init
-
-# Install required dependencies
-npm install lucide-react @radix-ui/react-navigation-menu
-                            `}
-                          </pre>
-                        </div>
+                  <h3 className="text-lg font-medium">Deployment</h3>
+                  <p>
+                    TrustEcom can be deployed to Vercel or any other hosting platform that supports Next.js
+                    applications.
+                  </p>
+                  <ol className="list-decimal pl-6 space-y-2">
+                    <li>
+                      Build the application:
+                      <div className="bg-muted p-2 rounded-md my-2">
+                        <code>npm run build</code>
                       </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">Step 2: Create Core UI Components</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">Implement the main UI components as shown in the prototype:</p>
-                        <ul className="list-disc pl-6 text-sm space-y-1">
-                          <li>Header with navigation</li>
-                          <li>Footer</li>
-                          <li>Product cards</li>
-                          <li>Marketplace layout</li>
-                          <li>Auction components</li>
-                          <li>Wallet interface</li>
-                        </ul>
+                    </li>
+                    <li>
+                      Deploy to Vercel:
+                      <div className="bg-muted p-2 rounded-md my-2">
+                        <code>vercel --prod</code>
                       </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">Step 3: Implement Wallet Context</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">Create a wallet context to manage wallet connection and state:</p>
-                        <div className="bg-muted p-3 rounded-md">
-                          <pre className="text-xs overflow-auto">
-                            {`
-// Replace the mock implementation with actual Cardano wallet integration:
-import { createContext, useContext, useState, useEffect } from "react"
-import * as CardanoSerializationLib from "@emurgo/cardano-serialization-lib-browser"
-
-const WalletContext = createContext(null)
-
-export const WalletProvider = ({ children }) => {
-  const [wallet, setWallet] = useState(null)
-  const [address, setAddress] = useState(null)
-  const [balance, setBalance] = useState(0)
-  
-  const connectWallet = async () => {
-    try {
-      // Check if Nami wallet is available
-      const walletAPI = await window.cardano?.nami?.enable();
-      
-      if (!walletAPI) {
-        throw new Error("Nami wallet not found. Please install it.");
-      }
-      
-      // Get wallet address
-      const addressHex = await walletAPI.getChangeAddress();
-      const address = CardanoSerializationLib.Address.from_bytes(
-        Buffer.from(addressHex, 'hex')
-      ).to_bech32();
-      
-      setWallet(walletAPI);
-      setAddress(address);
-      
-      // Get wallet balance
-      const balanceValue = await getWalletBalance(walletAPI);
-      setBalance(balanceValue);
-      
-      return true;
-    } catch (error) {
-      console.error("Failed to connect wallet:", error);
-      return false;
-    }
-  };
-  
-  // Other wallet functions...
-  
-  return (
-    <WalletContext.Provider value={{ 
-      wallet, 
-      address, 
-      balance, 
-      connectWallet,
-      // Other functions...
-    }}>
-      {children}
-    </WalletContext.Provider>
-  );
-};
-                            `}
-                          </pre>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    </li>
+                    <li>Set up environment variables in the Vercel dashboard.</li>
+                  </ol>
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-lg font-medium">Phase 2: Backend Development</h3>
-
-                  <div className="space-y-4 mt-4">
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">Step 4: Set Up Backend API</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">Create a Node.js/Express backend or use Next.js API routes:</p>
-                        <div className="bg-muted p-3 rounded-md">
-                          <pre className="text-xs overflow-auto">
-                            {`
-// app/api/products/route.ts
-import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-
-export async function GET() {
-  try {
-    const products = await db.product.findMany({
-      include: {
-        tokenData: true,
-      },
-    });
-    
-    return NextResponse.json(products);
-  } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to fetch products' },
-      { status: 500 }
-    );
-  }
-}
-                            `}
-                          </pre>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">Step 5: Database Integration</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">Set up PostgreSQL with Prisma or Supabase for data storage:</p>
-                        <div className="bg-muted p-3 rounded-md">
-                          <pre className="text-xs overflow-auto">
-                            {`
-// prisma/schema.prisma
-generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  walletAddress String?   @unique
-  products      Product[]
-  bids          Bid[]
-  reviews       Review[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-}
-
-model Product {
-  id          String   @id @default(cuid())
-  name        String
-  description String
-  price       Float
-  category    String
-  sellerId    String
-  seller      User     @relation(fields: [sellerId], references: [id])
-  tokenId     String?  @unique
-  tokenData   Token?
-  isAuction   Boolean  @default(false)
-  bids        Bid[]
-  reviews     Review[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Token {
-  id          String   @id @default(cuid())
-  tokenId     String   @unique
-  productId   String   @unique
-  product     Product  @relation(fields: [productId], references: [id])
-  metadata    Json
-  txHash      String
-  createdAt   DateTime @default(now())
-}
-
-model Bid {
-  id        String   @id @default(cuid())
-  amount    Float
-  productId String
-  product   Product  @relation(fields: [productId], references: [id])
-  bidderId  String
-  bidder    User     @relation(fields: [bidderId], references: [id])
-  txHash    String?
-  createdAt DateTime @default(now())
-}
-
-model Review {
-  id        String   @id @default(cuid())
-  rating    Int
-  comment   String?
-  productId String
-  product   Product  @relation(fields: [productId], references: [id])
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  verified  Boolean  @default(false)
-  createdAt DateTime @default(now())
-}
-                            `}
-                          </pre>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <h3 className="text-lg font-medium">Testing</h3>
+                  <p>
+                    It's recommended to test TrustEcom on the Cardano testnet before deploying to mainnet. This allows
+                    you to verify that all functionality works correctly without using real ADA.
+                  </p>
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li>Use a testnet wallet (Nami, Eternl, etc.)</li>
+                    <li>Get testnet ADA from the Cardano testnet faucet</li>
+                    <li>Test all functionality: wallet connection, NFT minting, auctions, purchases</li>
+                    <li>Verify that transactions are recorded correctly on the testnet blockchain</li>
+                  </ul>
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-lg font-medium">Phase 3: Blockchain Integration</h3>
-
-                  <div className="space-y-4 mt-4">
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">Step 6: Cardano Wallet Integration</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">Implement CIP-30 wallet connector for Nami, Eternl, etc.:</p>
-                        <div className="bg-muted p-3 rounded-md">
-                          <pre className="text-xs overflow-auto">
-                            {`
-// lib/cardano.ts
-import * as CardanoSerializationLib from "@emurgo/cardano-serialization-lib-browser";
-
-export async function getAvailableWallets() {
-  const wallets = [];
-  
-  if (window.cardano?.nami) wallets.push('nami');
-  if (window.cardano?.eternl) wallets.push('eternl');
-  if (window.cardano?.flint) wallets.push('flint');
-  
-  return wallets;
-}
-
-export async function connectWallet(walletName) {
-  try {
-    const wallet = window.cardano?.[walletName];
-    if (!wallet) throw new Error(\`\${walletName} wallet not found\`);
-    
-    const api = await wallet.enable();
-    return api;
-  } catch (error) {
-    console.error("Error connecting to wallet:", error);
-    throw error;
-  }
-}
-
-export async function getWalletBalance(walletAPI) {
-  try {
-    const balanceHex = await walletAPI.getBalance();
-    const balance = CardanoSerializationLib.Value.from_bytes(
-      Buffer.from(balanceHex, 'hex')
-    );
-    
-    // Extract ADA amount in lovelace (1 ADA = 1,000,000 lovelace)
-    const lovelace = balance.coin().to_str();
-    const adaAmount = parseInt(lovelace) / 1000000;
-    
-    return adaAmount;
-  } catch (error) {
-    console.error("Error getting wallet balance:", error);
-    throw error;
-  }
-}
-                            `}
-                          </pre>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">Step 7: NFT Minting Implementation</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">Create functionality to mint NFTs for products:</p>
-                        <div className="bg-muted p-3 rounded-md">
-                          <pre className="text-xs overflow-auto">
-                            {`
-// lib/nft.ts
-import * as CardanoSerializationLib from "@emurgo/cardano-serialization-lib-browser";
-import { Buffer } from 'buffer';
-
-export async function mintProductNFT(walletAPI, productData) {
-  try {
-    // Prepare metadata
-    const metadata = {
-      721: {
-        [policyId]: {
-          [assetName]: {
-            name: productData.name,
-            description: productData.description,
-            image: productData.imageUrl,
-            // Other product details
-          }
-        }
-      }
-    };
-    
-    // Get transaction parameters
-    const latestBlock = await blockfrostAPI.blocksLatest();
-    const parameters = await blockfrostAPI.epochsParameters(latestBlock.epoch);
-    
-    // Build the transaction
-    // ... (transaction building code)
-    
-    // Sign and submit transaction
-    const txHash = await walletAPI.signTx(tx, true);
-    await blockfrostAPI.txSubmit(txHash);
-    
-    return {
-      txHash,
-      assetId: \`\${policyId}.\${assetName}\`,
-    };
-  } catch (error) {
-    console.error("Error minting NFT:", error);
-    throw error;
-  }
-}
-                            `}
-                          </pre>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">Step 8: Smart Contract Development</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">Develop Plutus smart contracts for auctions and escrow:</p>
-                        <div className="bg-muted p-3 rounded-md">
-                          <pre className="text-xs overflow-auto">
-                            {`
--- Auction.hs (Simplified example)
-{-# LANGUAGE DataKinds           #-}
-{-# LANGUAGE NoImplicitPrelude   #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TemplateHaskell     #-}
-{-# LANGUAGE TypeApplications    #-}
-{-# LANGUAGE TypeFamilies        #-}
-
-module Auction where
-
-import           PlutusTx.Prelude
-import qualified PlutusTx
-import           Ledger               hiding (singleton)
-import           Ledger.Constraints   as Constraints
-import qualified Ledger.Typed.Scripts as Scripts
-import           Ledger.Value         as Value
-
-data AuctionDatum = AuctionDatum
-    { auctionSeller   :: PubKeyHash
-    , auctionDeadline :: POSIXTime
-    , auctionMinBid   :: Integer
-    , highestBid      :: Integer
-    , highestBidder   :: PubKeyHash
-    }
-
-PlutusTx.unstableMakeIsData ''AuctionDatum
-
--- Auction validator logic
--- ...
-                            `}
-                          </pre>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <h3 className="text-lg font-medium">Customization</h3>
+                  <p>TrustEcom can be customized to fit your specific needs. Here are some common customizations:</p>
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li>
+                      Change the color scheme in <code>tailwind.config.ts</code>
+                    </li>
+                    <li>
+                      Modify the product categories in <code>components/header.tsx</code>
+                    </li>
+                    <li>
+                      Add additional fields to product metadata in <code>lib/ipfs/ipfs-client.ts</code>
+                    </li>
+                    <li>
+                      Implement additional smart contract functionality in <code>lib/cardano/smart-contracts.ts</code>
+                    </li>
+                    <li>Add support for additional payment methods</li>
+                  </ul>
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-lg font-medium">Phase 4: Integration and Testing</h3>
-
-                  <div className="space-y-4 mt-4">
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">Step 9: Connect Frontend to Backend and Blockchain</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">Integrate all components and implement data flow:</p>
-                        <ul className="list-disc pl-6 text-sm space-y-1">
-                          <li>Connect product listings to backend API</li>
-                          <li>Implement wallet connection in UI</li>
-                          <li>Create purchase and auction flows</li>
-                          <li>Implement NFT verification display</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">Step 10: Testing on Testnet</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">Test all functionality on Cardano testnet before mainnet deployment:</p>
-                        <ul className="list-disc pl-6 text-sm space-y-1">
-                          <li>Test wallet connection and transactions</li>
-                          <li>Test NFT minting and transfers</li>
-                          <li>Test auction smart contracts</li>
-                          <li>Test product listing and purchasing</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="hackathon" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Hackathon Preparation</CardTitle>
-                <CardDescription>Tips and strategies for presenting TrustEcom at your hackathon</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-2">
-                  <h3 className="text-lg font-medium">Preparing Your Hackathon Submission</h3>
-
-                  <div className="space-y-4 mt-4">
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">1. Focus on a Minimum Viable Product (MVP)</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">
-                          For a hackathon, prioritize demonstrating core functionality over implementing every feature:
-                        </p>
-                        <ul className="list-disc pl-6 text-sm space-y-1">
-                          <li>
-                            <span className="font-medium">Must-have features:</span> Wallet connection, product listing,
-                            NFT minting, and basic purchase flow
-                          </li>
-                          <li>
-                            <span className="font-medium">Nice-to-have features:</span> Auctions, detailed verification
-                            history, reviews
-                          </li>
-                          <li>
-                            <span className="font-medium">Future features:</span> AI fraud detection, advanced search,
-                            mobile app
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">2. Create a Compelling Demo</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">Prepare a demonstration that showcases the unique value of TrustEcom:</p>
-                        <ul className="list-disc pl-6 text-sm space-y-1">
-                          <li>Create a demo script that shows the complete user journey</li>
-                          <li>Prepare sample products with interesting stories and verification histories</li>
-                          <li>Show both buyer and seller perspectives</li>
-                          <li>Demonstrate blockchain verification with visual explanations</li>
-                          <li>Have fallback options in case of technical issues during the demo</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">3. Prepare Your Pitch</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">
-                          Craft a compelling pitch that highlights the problem, solution, and impact:
-                        </p>
-                        <ol className="list-decimal pl-6 text-sm space-y-1">
-                          <li>
-                            <span className="font-medium">Problem statement:</span> Highlight e-commerce fraud issues,
-                            especially in Nigeria
-                          </li>
-                          <li>
-                            <span className="font-medium">Solution overview:</span> Explain how blockchain verification
-                            solves these problems
-                          </li>
-                          <li>
-                            <span className="font-medium">Technical innovation:</span> Showcase the Cardano integration
-                            and NFT tokenization
-                          </li>
-                          <li>
-                            <span className="font-medium">Market opportunity:</span> Discuss the potential impact and
-                            business model
-                          </li>
-                          <li>
-                            <span className="font-medium">Demo:</span> Show the working prototype
-                          </li>
-                          <li>
-                            <span className="font-medium">Roadmap:</span> Outline future development plans
-                          </li>
-                        </ol>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">4. Technical Documentation</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">
-                          Prepare comprehensive documentation for judges and technical evaluators:
-                        </p>
-                        <ul className="list-disc pl-6 text-sm space-y-1">
-                          <li>GitHub repository with clear README</li>
-                          <li>Architecture diagrams explaining system components</li>
-                          <li>API documentation</li>
-                          <li>Smart contract explanations</li>
-                          <li>Setup instructions for running the project locally</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
+                  <h3 className="text-lg font-medium">Troubleshooting</h3>
+                  <p>If you encounter issues with TrustEcom, here are some common solutions:</p>
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li>
+                      <span className="font-medium">Wallet connection issues:</span> Make sure you have a compatible
+                      wallet extension installed and that it's configured for the correct network (testnet or mainnet).
+                    </li>
+                    <li>
+                      <span className="font-medium">IPFS upload failures:</span> Verify your Infura credentials and
+                      check that you have sufficient storage quota.
+                    </li>
+                    <li>
+                      <span className="font-medium">Transaction errors:</span> Ensure you have sufficient ADA to cover
+                      the transaction fee and that your wallet is properly connected.
+                    </li>
+                    <li>
+                      <span className="font-medium">NFT minting issues:</span> Check that your Blockfrost API key is
+                      valid and that you're using the correct network (testnet or mainnet).
+                    </li>
+                  </ul>
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-lg font-medium">Hackathon Success Strategies</h3>
-
-                  <div className="space-y-4 mt-4">
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">1. Team Preparation</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">Organize your team for maximum efficiency during the hackathon:</p>
-                        <ul className="list-disc pl-6 text-sm space-y-1">
-                          <li>Assign clear roles based on technical strengths</li>
-                          <li>Create a detailed timeline for the hackathon period</li>
-                          <li>Set up communication channels and development environment</li>
-                          <li>Practice your pitch and demo multiple times</li>
-                          <li>Prepare answers for potential questions from judges</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">2. Technical Preparation</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">Ensure your technical setup is ready for the hackathon:</p>
-                        <ul className="list-disc pl-6 text-sm space-y-1">
-                          <li>Set up development environments for all team members</li>
-                          <li>Create testnet wallets and fund them with test ADA</li>
-                          <li>Prepare API keys for Blockfrost or other services</li>
-                          <li>Set up a shared database instance</li>
-                          <li>Create deployment pipelines for quick updates</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">3. Highlighting Blockchain Innovation</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">Emphasize the blockchain aspects that make TrustEcom innovative:</p>
-                        <ul className="list-disc pl-6 text-sm space-y-1">
-                          <li>Explain why Cardano is the right blockchain for this application</li>
-                          <li>Demonstrate the security benefits of the eUTxO model</li>
-                          <li>Show how NFTs provide verifiable authenticity</li>
-                          <li>Explain how smart contracts enable trustless transactions</li>
-                          <li>Highlight the environmental benefits of Cardano's Proof-of-Stake</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-medium">4. Post-Hackathon Plans</h4>
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm">
-                          Be prepared to discuss how you'll develop TrustEcom after the hackathon:
-                        </p>
-                        <ul className="list-disc pl-6 text-sm space-y-1">
-                          <li>Short-term development roadmap</li>
-                          <li>Business model and monetization strategy</li>
-                          <li>Potential partnerships and integrations</li>
-                          <li>Market entry strategy for Nigeria and beyond</li>
-                          <li>Funding requirements and plans</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
+                  <h3 className="text-lg font-medium">Resources</h3>
+                  <p>Here are some helpful resources for working with TrustEcom and its underlying technologies:</p>
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li>
+                      <Link href="https://meshjs.dev/" target="_blank" className="text-primary hover:underline">
+                        Mesh.js Documentation
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="https://docs.cardano.org/" target="_blank" className="text-primary hover:underline">
+                        Cardano Documentation
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="https://cips.cardano.org/cips/cip25/"
+                        target="_blank"
+                        className="text-primary hover:underline"
+                      >
+                        CIP-25: NFT Metadata Standard
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="https://cips.cardano.org/cips/cip30/"
+                        target="_blank"
+                        className="text-primary hover:underline"
+                      >
+                        CIP-30: Wallet Web Bridge
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="https://docs.ipfs.tech/" target="_blank" className="text-primary hover:underline">
+                        IPFS Documentation
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="https://nextjs.org/docs" target="_blank" className="text-primary hover:underline">
+                        Next.js Documentation
+                      </Link>
+                    </li>
+                  </ul>
                 </div>
               </CardContent>
             </Card>
